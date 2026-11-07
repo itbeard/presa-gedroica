@@ -111,6 +111,7 @@
         if (m.timer) applyTimerState(m.timer);
         if (m.idx !== idx || m.step !== step) {
           const changed = m.idx !== idx;
+          if (changed) hook(idx, 'leave');
           idx = clamp(m.idx, 0, slides.length - 1);
           step = clamp(m.step, 0, builds[idx].length);
           render();
@@ -196,6 +197,35 @@
     const t = e.target.closest('[data-timer]');
     if (t && !t.closest('.pv-next')) { e.stopPropagation(); tToggle(); }
   }, true);
+
+  /* ---------- Відэа ---------- */
+  // Запускаецца пры ўваходзе на слайд, спыняецца пры выхадзе. Клік па відэа або K — паўза.
+  const curVideo = () => $('[data-video] video', slides[idx]);
+  function toggleVideo(v = curVideo()) {
+    if (!v) return;
+    if (v.paused) { if (v.ended) v.currentTime = 0; v.play().catch(() => {}); } else v.pause();
+  }
+  $$('[data-video]').forEach(box => {
+    const v = $('video', box);
+    if (PRESENTER) v.muted = true; // каб гук не ішоў з двух вокнаў
+    const sync = () => box.classList.toggle('paused', v.paused);
+    ['play', 'pause', 'ended'].forEach(ev => v.addEventListener(ev, sync));
+    sync();
+    box.addEventListener('click', (e) => {
+      if (document.body.classList.contains('overview')) return;
+      e.stopPropagation();
+      toggleVideo(v);
+    });
+  });
+  hooks.video = {
+    enter() {
+      const v = curVideo();
+      if (!v || STATIC) return;
+      v.currentTime = 0;
+      v.play().catch(() => { /* браўзер забараніў аўтазапуск — дапаможа клік */ });
+    },
+    leave() { const v = curVideo(); if (v) v.pause(); },
+  };
 
   /* ---------- QR і спасылкі ---------- */
   const MOTIF = [
@@ -333,6 +363,7 @@
     <dt>N</dt><dd>нататкі на гэтым экране</dd>
     <dt>B або .</dt><dd>чорны экран</dd>
     <dt>лічба + Enter</dt><dd>перайсці да слайда</dd>
+    <dt>K</dt><dd>відэа: паўза / прайграць</dd>
     <dt>S / R</dt><dd>таймер: старт-паўза / скінуць</dd>
     <dt>+ / −</dt><dd>таймер: ±1 хвіліна</dd>
   </dl></div>`);
@@ -436,6 +467,7 @@
       case 'b': case 'B': case '.': case 'и': case 'І': case 'і': toggleBlack(); break;
       case 's': case 'S': case 'ы': case 'Ы': tToggle(); break;
       case 'r': case 'R': case 'к': case 'К': tReset(); break;
+      case 'k': case 'K': case 'л': case 'Л': toggleVideo(); break;
       case '+': case '=': tAdjust(1); break;
       case '-': case '_': tAdjust(-1); break;
       case '?': case 'h': case 'H': toggleHelp(); break;
