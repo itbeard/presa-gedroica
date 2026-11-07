@@ -12,6 +12,7 @@
 Кожны `git push` у `main` аўтаматычна выкочвае сайт на GitHub Pages (`.github/workflows/pages.yml`), гэта займае каля хвіліны.
 
 - **Спасылка на ChatGPT-праект і QR-код:** `js/config.js` → `chatgptUrl`. QR будуецца сам. Пакуль спасылкі няма, на слайдзе бачна папярэджанне.
+- **Матэрыялы на апошнім слайдзе:** файлы для спампоўкі ляжаць у `assets/files/` (прампт `skaromnik.md`, базы `praklony.pdf` і `praklony-duncy.jpg`). Спасылка на прэзентацыю для QR — `deckUrl` у `js/config.js`.
 - **Час для груп:** `js/config.js` → `timerMinutes` (па змаўчанні 10).
 - **Тэксты слайдаў і нататкі для выступоўцаў:** `index.html` (кожны слайд — гэта `<section class="slide">`, нататкі ляжаць у `<aside class="notes">`).
 - **Стылі:** `css/style.css`.

@@ -8,6 +8,11 @@ window.PRESA_CONFIG = {
   // Пуста — паказваецца сама спасылка без https://.
   chatgptLabel: "bit.ly/4iuFR3B",
 
+  // Спасылка на саму прэзентацыю (QR на апошнім слайдзе).
+  // #materyjaly адкрывае адразу слайд з матэрыяламі для спампоўкі.
+  deckUrl: "https://itbeard.github.io/presa-gedroica/#materyjaly",
+  deckLabel: "itbeard.github.io/presa-gedroica",
+
   // Колькі хвілін даём групам на генерацыю лаянкі (таймер на слайдзе). Увесь занятак — 50 хв.
   timerMinutes: 10,
 };

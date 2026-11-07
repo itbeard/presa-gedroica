@@ -89,8 +89,11 @@
   }
 
   function fromHash() {
-    const m = /^#\/?(\d+)/.exec(location.hash);
-    return m ? clamp(parseInt(m[1], 10) - 1, 0, slides.length - 1) : null;
+    const h = decodeURIComponent(location.hash.replace(/^#\/?/, ''));
+    if (!h) return null;
+    if (/^\d+$/.test(h)) return clamp(parseInt(h, 10) - 1, 0, slides.length - 1);
+    const i = slides.findIndex(s => s.dataset.id === h); // напр. #materyjaly
+    return i >= 0 ? i : null;
   }
   addEventListener('hashchange', () => { const h = fromHash(); if (h !== null && h !== idx) go(h, 'all'); });
 
@@ -259,19 +262,23 @@
     return s;
   };
   function initLinks() {
-    const url = (CFG.chatgptUrl || '').trim();
+    // data-qr / data-link без значэння — спасылка на ChatGPT; data-qr="deckUrl" — на прэзентацыю
+    const urlOf = (key) => (CFG[key || 'chatgptUrl'] || '').trim();
     $$('[data-qr]').forEach(box => {
+      const url = urlOf(box.dataset.qr);
       if (url && window.qrcode) box.innerHTML = qrSvg(url);
       else box.innerHTML = '<div class="qr-empty">Тут будзе QR-код.<br>Устаўце спасылку ў js/config.js</div>';
     });
     $$('[data-link]').forEach(n => {
+      const key = n.dataset.link || 'chatgptUrl';
+      const url = urlOf(key);
       if (!url) { n.textContent = 'спасылка яшчэ не ўстаўлена'; return; }
       n.innerHTML = '';
       const a = el('a'); a.href = url; a.target = '_blank'; a.rel = 'noopener';
-      a.textContent = CFG.chatgptLabel || prettyUrl(url);
+      a.textContent = CFG[key.replace(/Url$/, 'Label')] || prettyUrl(url);
       n.appendChild(a);
     });
-    $$('[data-config-warning]').forEach(n => { n.hidden = !!url; });
+    $$('[data-config-warning]').forEach(n => { n.hidden = !!urlOf('chatgptUrl'); });
     $$('[data-timer-min]').forEach(n => { n.textContent = Math.round(T.total / 60); });
   }
 

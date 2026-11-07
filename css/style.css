@@ -545,6 +545,23 @@ strong, b { font-weight: 700; color: var(--fg); }
 }
 .btn.ghost { background: transparent; color: var(--mut); box-shadow: none; border: 2px solid var(--hair); }
 
+/* Матэрыялы */
+.s-materials .grid { display: grid; grid-template-columns: 500px 1fr; gap: 90px; align-items: start; }
+.s-materials .qr-card { padding: 36px; border-radius: 40px; }
+.downloads { display: grid; gap: 20px; }
+.dl {
+  display: grid; grid-template-columns: 72px 1fr 52px; align-items: center; gap: 28px;
+  padding: 26px 36px; border-radius: 28px;
+  background: var(--card); color: var(--fg); text-decoration: none;
+  box-shadow: 0 30px 80px -55px rgba(40,10,10,.4);
+  transition: transform .2s var(--ease), box-shadow .2s;
+}
+.dl:hover { transform: translateY(-3px); box-shadow: 0 30px 70px -40px rgba(40,10,10,.5); }
+.dl .ico { width: 72px; height: 72px; color: var(--accent); }
+.dl .go { width: 52px; height: 52px; color: var(--accent); }
+.dl .t { display: block; font: 700 42px/1.1 var(--sans); letter-spacing: -.02em; }
+.dl .s { display: block; font: 500 26px/1.3 var(--sans); color: var(--mut); margin-top: 6px; }
+
 /* Фінал */
 .s-final .inner { display: grid; grid-template-columns: 520px 1fr; gap: 110px; align-items: center; }
 .social { display: flex; align-items: center; gap: 26px; font: 700 64px/1 var(--sans); letter-spacing: -.03em; color: var(--fg); }
